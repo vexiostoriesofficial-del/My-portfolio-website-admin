@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta name="theme-color" content="#050505">
+
+<title>Admin Login</title>
+
+
+<style>
+
+/* ==============================
+   RESET
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ==============================
+   BODY
+============================== */
+
+body {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(255,255,255,.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 85%,
+            rgba(255,255,255,.07),
+            transparent 35%
+        ),
+        #050505;
+
+    overflow-x: hidden;
+}
+
+
+/* ==============================
+   LOGIN CARD
+============================== */
+
+.login-card {
+
+    width: 100%;
+
+    max-width: 420px;
+
+    padding: 32px 24px;
+
+    border-radius: 26px;
+
+    background:
+        rgba(255,255,255,.065);
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    box-shadow:
+
+        0 25px 70px
+        rgba(0,0,0,.55),
+
+        inset 0 1px 0
+        rgba(255,255,255,.10);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    animation:
+        showCard .6s ease;
+}
+
+
+/* ==============================
+   ICON
+============================== */
+
+.login-icon {
+
+    width: 65px;
+
+    height: 65px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    font-size: 28px;
+}
+
+
+/* ==============================
+   TITLE
+============================== */
+
+.label {
+
+    text-align: center;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    color:
+        rgba(255,255,255,.45);
+
+    margin-bottom: 8px;
+}
+
+
+h1 {
+
+    text-align: center;
+
+    font-size: 30px;
+
+    margin-bottom: 8px;
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    color:
+        rgba(255,255,255,.50);
+
+    margin-bottom: 28px;
+}
+
+
+/* ==============================
+   INPUT
+============================== */
+
+.input-box {
+
+    margin-bottom: 17px;
+}
+
+
+.input-box label {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color:
+        rgba(255,255,255,.70);
+
+    margin-bottom: 8px;
+}
+
+
+.input-box input {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border-radius: 14px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    outline: none;
+
+    background:
+        rgba(0,0,0,.30);
+
+    color: white;
+
+    font-size: 14px;
+}
+
+
+.input-box input::placeholder {
+
+    color:
+        rgba(255,255,255,.30);
+}
+
+
+.input-box input:focus {
+
+    border-color:
+        rgba(255,255,255,.35);
+
+    background:
+        rgba(255,255,255,.06);
+}
+
+
+/* ==============================
+   BUTTON
+============================== */
+
+.login-button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: white;
+
+    color: #050505;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.login-button:active {
+
+    transform: scale(.98);
+}
+
+
+.login-button:disabled {
+
+    opacity: .5;
+
+    cursor: not-allowed;
+}
+
+
+/* ==============================
+   MESSAGE
+============================== */
+
+.message {
+
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    background:
+        rgba(255,70,70,.08);
+
+    border:
+        1px solid
+        rgba(255,70,70,.18);
+
+    color:
+        #ffb4b4;
+}
+
+
+/* ==============================
+   FOOTER
+============================== */
+
+.footer {
+
+    text-align: center;
+
+    margin-top: 22px;
+
+    font-size: 11px;
+
+    color:
+        rgba(255,255,255,.30);
+}
+
+
+/* ==============================
+   ANIMATION
+============================== */
+
+@keyframes showCard {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(20px)
+            scale(.97);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .login-card {
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- LOGIN CARD -->
+
+<div class="login-card">
+
+
+    <div class="login-icon">
+        🔐
+    </div>
+
+
+    <div class="label">
+        SECURE ACCESS
+    </div>
+
+
+    <h1>
+        Admin Login
+    </h1>
+
+
+    <p class="subtitle">
+        Login to manage your portfolio.
+    </p>
+
+
+    <!-- EMAIL -->
+
+    <div class="input-box">
+
+        <label for="email">
+            Email Address
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+        >
+
+    </div>
+
+
+    <!-- PASSWORD -->
+
+    <div class="input-box">
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+        >
+
+    </div>
+
+
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- LOGIN -->
+
+    <button
+        id="loginButton"
+        class="login-button"
+        type="button"
+    >
+        Login
+    </button>
+
+
+    <div class="footer">
+        Personal Portfolio Admin
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* ==============================
+   SUPABASE
+============================== */
+
+const SUPABASE_URL =
+"https://grrpgehtndpgzepnqbwf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_tBa4h588PaqBxuuiHzF0cw_4bmrZST4";
+
+
+/* ==============================
+   ELEMENTS
+============================== */
+
+const email =
+document.getElementById("email");
+
+const password =
+document.getElementById("password");
+
+const loginButton =
+document.getElementById("loginButton");
+
+const message =
+document.getElementById("message");
+
+
+/* ==============================
+   LOAD SUPABASE
+============================== */
+
+function loadSupabase() {
+
+    return new Promise((resolve, reject) => {
+
+        if (window.supabase) {
+
+            resolve();
+
+            return;
+        }
+
+
+        const script =
+        document.createElement("script");
+
+
+        script.src =
+        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+
+        script.onload = resolve;
+
+        script.onerror = reject;
+
+
+        document.head.appendChild(script);
+
+    });
+
+}
+
+
+/* ==============================
+   MESSAGE
+============================== */
+
+function showMessage(text) {
+
+    message.textContent = text;
+
+    message.style.display = "block";
+}
+
+
+function hideMessage() {
+
+    message.textContent = "";
+
+    message.style.display = "none";
+}
+
+
+/* ==============================
+   LOGIN
+============================== */
+
+async function login() {
+
+    const userEmail =
+    email.value.trim();
+
+    const userPassword =
+    password.value;
+
+
+    hideMessage();
+
+
+    if (!userEmail || !userPassword) {
+
+        showMessage(
+            "Please enter email and password."
+        );
+
+        return;
+    }
+
+
+    loginButton.disabled = true;
+
+    loginButton.textContent =
+        "Logging in...";
+
+
+    try {
+
+        await loadSupabase();
+
+
+        const client =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+        const {
+            data,
+            error
+        } =
+        await client.auth.signInWithPassword({
+
+            email: userEmail,
+
+            password: userPassword
+
+        });
+
+
+        if (error) {
+
+            throw error;
+        }
+
+
+        if (!data.session) {
+
+            throw new Error(
+                "Login session was not created."
+            );
+        }
+
+
+        loginButton.textContent =
+            "Success ✓";
+
+
+        /*
+           Dashboard will be created
+           in the next step.
+        */
+
+        setTimeout(() => {
+
+            window.location.href =
+                "dashboard.html";
+
+        }, 500);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        showMessage(
+            error.message ||
+            "Login failed."
+        );
+
+
+        loginButton.disabled = false;
+
+        loginButton.textContent =
+            "Login";
+    }
+
+}
+
+
+/* ==============================
+   BUTTON
+============================== */
+
+loginButton.addEventListener(
+    "click",
+    login
+);
+
+
+/* ==============================
+   ENTER KEY
+============================== */
+
+password.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            login();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

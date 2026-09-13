@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profile Manager</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#070707;
+  color:#fff;
+  min-height:100vh;
+  padding:16px;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.header h1{
+  font-size:23px;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  padding:10px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:18px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:16px;
+}
+
+.form-group{
+  margin-bottom:15px;
+}
+
+label{
+  display:block;
+  color:#aaa;
+  font-size:13px;
+  margin-bottom:7px;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  outline:none;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  font-size:14px;
+}
+
+input:focus,
+textarea:focus{
+  border-color:rgba(255,255,255,.45);
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+  line-height:1.5;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.save{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#000;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.save:disabled{
+  opacity:.55;
+}
+
+.status{
+  text-align:center;
+  min-height:20px;
+  margin-top:12px;
+  font-size:14px;
+}
+
+.profile-preview{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:18px;
+  padding:14px;
+  border-radius:16px;
+  background:rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.profile-preview img{
+  width:75px;
+  height:75px;
+  object-fit:cover;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.2);
+  background:#111;
+}
+
+.preview-name{
+  font-weight:bold;
+}
+
+.preview-info{
+  color:#999;
+  font-size:12px;
+  margin-top:5px;
+}
+
+@media(max-width:600px){
+
+  .grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .header h1{
+    font-size:20px;
+  }
+
+  .card{
+    padding:16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+
+    <h1>Profile Manager</h1>
+
+    <a href="dashboard.html" class="back">
+      ← Dashboard
+    </a>
+
+  </div>
+
+
+  <!-- PROFILE PREVIEW -->
+
+  <div class="card">
+
+    <div class="title">
+      Profile Preview
+    </div>
+
+    <div class="profile-preview">
+
+      <img
+        id="previewImage"
+        src=""
+        alt="Profile"
+      >
+
+      <div>
+
+        <div
+          class="preview-name"
+          id="previewName"
+        >
+          Loading...
+        </div>
+
+        <div
+          class="preview-info"
+          id="previewIdentity"
+        >
+          Loading...
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- BASIC INFORMATION -->
+
+  <div class="card">
+
+    <div class="title">
+      Basic Information
+    </div>
+
+
+    <div class="grid">
+
+      <div class="form-group">
+
+        <label>Name</label>
+
+        <input
+          id="name"
+          placeholder="Abu Bokkor"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Brand</label>
+
+        <input
+          id="brand"
+          placeholder="XYZ"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Identity</label>
+
+      <input
+        id="identity"
+        placeholder="Your identity"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Location</label>
+
+      <input
+        id="location"
+        placeholder="Dhaka, Bangladesh"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Profile Image URL</label>
+
+      <input
+        id="profile_image_url"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+  </div>
+
+
+  <!-- HERO -->
+
+  <div class="card">
+
+    <div class="title">
+      Hero Section
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Hero Title</label>
+
+      <input
+        id="hero_title"
+        placeholder="Welcome to my world"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Hero Subtitle</label>
+
+      <input
+        id="hero_subtitle"
+        placeholder="A short subtitle"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Hero Description</label>
+
+      <textarea
+        id="hero_description"
+        placeholder="Write your short introduction..."
+      ></textarea>
+
+    </div>
+
+  </div>
+
+
+  <!-- ABOUT -->
+
+  <div class="card">
+
+    <div class="title">
+      About Me
+    </div>
+
+
+    <div class="form-group">
+
+      <label>About</label>
+
+      <textarea
+        id="about"
+        placeholder="Write about yourself..."
+      ></textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Skills</label>
+
+      <textarea
+        id="skills"
+        placeholder="Graphic Design, Gaming, Content Creation..."
+      ></textarea>
+
+    </div>
+
+  </div>
+
+
+  <!-- EDUCATION / EXPERIENCE -->
+
+  <div class="card">
+
+    <div class="title">
+      Education & Experience
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Education</label>
+
+      <textarea
+        id="education"
+        placeholder="Write your education..."
+      ></textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Experience</label>
+
+      <textarea
+        id="experience"
+        placeholder="Write your experience..."
+      ></textarea>
+
+    </div>
+
+  </div>
+
+
+  <!-- SAVE -->
+
+  <div class="card">
+
+    <button
+      class="save"
+      id="saveBtn"
+    >
+      Save Profile
+    </button>
+
+    <div
+      class="status"
+      id="status"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://grrpgehtndpgzepnqbwf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_tBa4h588PaqBxuuiHzF0cw_4bmrZST4";
+
+let client = null;
+
+let profileId = null;
+
+
+/* LOAD SUPABASE */
+
+const supabaseScript =
+document.createElement("script");
+
+supabaseScript.src =
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+supabaseScript.onload =
+async function(){
+
+  client =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+  await checkLogin();
+
+};
+
+document.head.appendChild(
+  supabaseScript
+);
+
+
+/* CHECK LOGIN */
+
+async function checkLogin(){
+
+  const {
+    data
+  } =
+  await client.auth.getSession();
+
+
+  if(!data.session){
+
+    location.href =
+      "index.html";
+
+    return;
+  }
+
+
+  loadProfile();
+
+}
+
+
+/* LOAD PROFILE */
+
+async function loadProfile(){
+
+  const {
+    data,
+    error
+  } =
+  await client
+    .from("profiles")
+    .select("*")
+    .order("id",{
+      ascending:true
+    })
+    .limit(1)
+    .maybeSingle();
+
+
+  if(error){
+
+    showStatus(
+      error.message,
+      true
+    );
+
+    return;
+  }
+
+
+  if(!data){
+
+    showStatus(
+      "No profile found. Please create one.",
+      true
+    );
+
+    return;
+  }
+
+
+  profileId =
+    data.id;
+
+
+  document.getElementById("name").value =
+    data.name || "";
+
+  document.getElementById("brand").value =
+    data.brand || "";
+
+  document.getElementById("identity").value =
+    data.identity || "";
+
+  document.getElementById("location").value =
+    data.location || "";
+
+  document.getElementById("hero_title").value =
+    data.hero_title || "";
+
+  document.getElementById("hero_subtitle").value =
+    data.hero_subtitle || "";
+
+  document.getElementById("hero_description").value =
+    data.hero_description || "";
+
+  document.getElementById("about").value =
+    data.about || "";
+
+  document.getElementById("skills").value =
+    data.skills || "";
+
+  document.getElementById("experience").value =
+    data.experience || "";
+
+  document.getElementById("education").value =
+    data.education || "";
+
+  document.getElementById("profile_image_url").value =
+    data.profile_image_url || "";
+
+
+  updatePreview();
+
+}
+
+
+/* PREVIEW */
+
+function updatePreview(){
+
+  const name =
+    document.getElementById("name").value;
+
+  const identity =
+    document.getElementById("identity").value;
+
+  const image =
+    document.getElementById(
+      "profile_image_url"
+    ).value;
+
+
+  document.getElementById(
+    "previewName"
+  ).textContent =
+    name || "Your Name";
+
+
+  document.getElementById(
+    "previewIdentity"
+  ).textContent =
+    identity || "Your Identity";
+
+
+  const preview =
+    document.getElementById(
+      "previewImage"
+    );
+
+
+  if(image){
+
+    preview.src =
+      image;
+
+    preview.style.display =
+      "block";
+
+  }else{
+
+    preview.removeAttribute("src");
+
+  }
+
+}
+
+
+/* LIVE PREVIEW */
+
+[
+  "name",
+  "identity",
+  "profile_image_url"
+].forEach(id => {
+
+  document
+    .getElementById(id)
+    .addEventListener(
+      "input",
+      updatePreview
+    );
+
+});
+
+
+/* SAVE */
+
+document
+.getElementById("saveBtn")
+.addEventListener(
+  "click",
+  saveProfile
+);
+
+
+async function saveProfile(){
+
+  if(!profileId){
+
+    showStatus(
+      "Profile ID not found.",
+      true
+    );
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "saveBtn"
+    );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Saving...";
+
+
+  const record = {
+
+    name:
+      document.getElementById("name")
+      .value.trim(),
+
+    brand:
+      document.getElementById("brand")
+      .value.trim(),
+
+    identity:
+      document.getElementById("identity")
+      .value.trim(),
+
+    location:
+      document.getElementById("location")
+      .value.trim(),
+
+    hero_title:
+      document.getElementById("hero_title")
+      .value.trim(),
+
+    hero_subtitle:
+      document.getElementById("hero_subtitle")
+      .value.trim(),
+
+    hero_description:
+      document.getElementById("hero_description")
+      .value.trim(),
+
+    about:
+      document.getElementById("about")
+      .value.trim(),
+
+    skills:
+      document.getElementById("skills")
+      .value.trim(),
+
+    experience:
+      document.getElementById("experience")
+      .value.trim(),
+
+    education:
+      document.getElementById("education")
+      .value.trim(),
+
+    profile_image_url:
+      document.getElementById(
+        "profile_image_url"
+      ).value.trim(),
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  const {
+    error
+  } =
+  await client
+    .from("profiles")
+    .update(record)
+    .eq("id",profileId);
+
+
+  if(error){
+
+    showStatus(
+      "Error: " + error.message,
+      true
+    );
+
+  }else{
+
+    showStatus(
+      "✓ Profile saved successfully"
+    );
+
+    updatePreview();
+
+  }
+
+
+  button.disabled = false;
+
+  button.textContent =
+    "Save Profile";
+
+}
+
+
+/* STATUS */
+
+function showStatus(
+  message,
+  isError=false
+){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  status.textContent =
+    message;
+
+  status.style.color =
+    isError
+    ? "#ff7070"
+    : "#9cffb0";
+
+}
+
+</script>
+
+</body>

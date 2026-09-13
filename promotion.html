@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Promotion Manager</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#070707;
+  color:#fff;
+  min-height:100vh;
+  padding:16px;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.header h1{
+  font-size:23px;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  padding:10px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:18px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  color:#aaa;
+  margin-bottom:7px;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  outline:none;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  font-size:14px;
+}
+
+input:focus,
+textarea:focus{
+  border-color:rgba(255,255,255,.45);
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:12px 0;
+}
+
+.check-row input{
+  width:18px;
+  height:18px;
+}
+
+.save{
+  width:100%;
+  padding:14px;
+  border-radius:13px;
+  background:#fff;
+  color:#000;
+  font-weight:bold;
+  font-size:15px;
+  border:0;
+  cursor:pointer;
+}
+
+.save:disabled{
+  opacity:.6;
+}
+
+.status{
+  text-align:center;
+  min-height:20px;
+  margin-top:12px;
+  font-size:14px;
+}
+
+.promotion-item{
+  border:1px solid rgba(255,255,255,.11);
+  background:rgba(0,0,0,.25);
+  border-radius:16px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.promotion-image{
+  width:100%;
+  max-height:220px;
+  object-fit:cover;
+  border-radius:12px;
+  margin-bottom:12px;
+  display:block;
+}
+
+.promotion-title{
+  font-size:17px;
+  font-weight:bold;
+}
+
+.promotion-description{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.5;
+  margin-top:7px;
+}
+
+.promotion-url{
+  color:#999;
+  font-size:12px;
+  margin-top:8px;
+  word-break:break-all;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.action-btn{
+  padding:9px 12px;
+  border-radius:10px;
+  color:#fff;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+  cursor:pointer;
+}
+
+.delete{
+  background:rgba(255,70,70,.12);
+}
+
+.empty{
+  color:#999;
+  text-align:center;
+  padding:20px;
+}
+
+@media(max-width:600px){
+
+  .grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .header h1{
+    font-size:20px;
+  }
+
+  .card{
+    padding:16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+
+    <h1>Promotion Manager</h1>
+
+    <a href="dashboard.html" class="back">
+      ← Dashboard
+    </a>
+
+  </div>
+
+
+  <!-- ADD / EDIT -->
+
+  <div class="card">
+
+    <div class="title" id="formTitle">
+      Add Promotion
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Image URL</label>
+
+      <input
+        id="image_url"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Title</label>
+
+      <input
+        id="title"
+        type="text"
+        placeholder="Promotion title"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Description</label>
+
+      <textarea
+        id="description"
+        placeholder="Write promotion description"
+      ></textarea>
+
+    </div>
+
+
+    <div class="grid">
+
+      <div class="form-group">
+
+        <label>Button Text</label>
+
+        <input
+          id="button_text"
+          type="text"
+          placeholder="View Now"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Button URL</label>
+
+        <input
+          id="button_url"
+          type="url"
+          placeholder="https://..."
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="grid">
+
+      <div class="form-group">
+
+        <label>Display Order</label>
+
+        <input
+          id="display_order"
+          type="number"
+          value="0"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="check-row">
+
+      <input
+        id="enabled"
+        type="checkbox"
+        checked
+      >
+
+      <label
+        for="enabled"
+        style="margin:0"
+      >
+        Enabled
+      </label>
+
+    </div>
+
+
+    <button
+      class="save"
+      id="saveBtn"
+    >
+      Add Promotion
+    </button>
+
+
+    <div
+      class="status"
+      id="status"
+    ></div>
+
+  </div>
+
+
+  <!-- PROMOTION LIST -->
+
+  <div class="card">
+
+    <div class="title">
+      Your Promotions
+    </div>
+
+    <div id="promotionList">
+      Loading...
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://grrpgehtndpgzepnqbwf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_tBa4h588PaqBxuuiHzF0cw_4bmrZST4";
+
+let client = null;
+
+let editingId = null;
+
+
+/* LOAD SUPABASE */
+
+const supabaseScript =
+document.createElement("script");
+
+supabaseScript.src =
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+supabaseScript.onload = async function(){
+
+  client =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+  await checkLogin();
+
+};
+
+document.head.appendChild(
+  supabaseScript
+);
+
+
+/* CHECK LOGIN */
+
+async function checkLogin(){
+
+  const {
+    data
+  } =
+    await client.auth.getSession();
+
+
+  if(!data.session){
+
+    location.href =
+      "index.html";
+
+    return;
+  }
+
+
+  loadPromotions();
+
+}
+
+
+/* LOAD PROMOTIONS */
+
+async function loadPromotions(){
+
+  const list =
+    document.getElementById(
+      "promotionList"
+    );
+
+
+  list.innerHTML =
+    "Loading...";
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+    .from("promotions")
+    .select("*")
+    .order(
+      "display_order",
+      {
+        ascending:true
+      }
+    );
+
+
+  if(error){
+
+    list.innerHTML =
+      `<div class="empty">
+        ${escapeHTML(error.message)}
+      </div>`;
+
+    return;
+  }
+
+
+  if(!data || data.length === 0){
+
+    list.innerHTML =
+      `<div class="empty">
+        No promotions added yet.
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  data.forEach(item => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "promotion-item";
+
+
+    const image =
+      item.image_url
+      ? `
+        <img
+          class="promotion-image"
+          src="${escapeHTML(item.image_url)}"
+          onerror="this.style.display='none'"
+        >
+      `
+      : "";
+
+
+    div.innerHTML = `
+
+      ${image}
+
+      <div class="promotion-title">
+        ${escapeHTML(
+          item.title || "Untitled Promotion"
+        )}
+      </div>
+
+      <div class="promotion-description">
+        ${escapeHTML(
+          item.description || ""
+        )}
+      </div>
+
+      <div class="promotion-url">
+        Button:
+        ${escapeHTML(
+          item.button_text || ""
+        )}
+        <br>
+        ${escapeHTML(
+          item.button_url || ""
+        )}
+      </div>
+
+      <div style="margin-top:8px">
+        ${
+          item.enabled
+          ? "🟢 Enabled"
+          : "⚪ Disabled"
+        }
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="action-btn"
+          onclick="editPromotion(${item.id})">
+          Edit
+        </button>
+
+        <button
+          class="action-btn"
+          onclick="togglePromotion(
+            ${item.id},
+            ${item.enabled}
+          )">
+          ${
+            item.enabled
+            ? "Disable"
+            : "Enable"
+          }
+        </button>
+
+        <button
+          class="action-btn delete"
+          onclick="deletePromotion(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+/* SAVE */
+
+document
+.getElementById("saveBtn")
+.addEventListener(
+  "click",
+  savePromotion
+);
+
+
+async function savePromotion(){
+
+  const image_url =
+    document
+    .getElementById("image_url")
+    .value.trim();
+
+
+  const title =
+    document
+    .getElementById("title")
+    .value.trim();
+
+
+  const description =
+    document
+    .getElementById("description")
+    .value.trim();
+
+
+  const button_text =
+    document
+    .getElementById("button_text")
+    .value.trim();
+
+
+  const button_url =
+    document
+    .getElementById("button_url")
+    .value.trim();
+
+
+  const display_order =
+    Number(
+      document
+      .getElementById("display_order")
+      .value
+    ) || 0;
+
+
+  const enabled =
+    document
+    .getElementById("enabled")
+    .checked;
+
+
+  if(!title){
+
+    showStatus(
+      "Title is required.",
+      true
+    );
+
+    return;
+  }
+
+
+  const button =
+    document
+    .getElementById("saveBtn");
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Saving...";
+
+
+  const record = {
+
+    image_url,
+    title,
+    description,
+    button_text,
+    button_url,
+    enabled,
+    display_order,
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  let error;
+
+
+  if(editingId){
+
+    const result =
+      await client
+      .from("promotions")
+      .update(record)
+      .eq("id", editingId);
+
+    error =
+      result.error;
+
+  }else{
+
+    const result =
+      await client
+      .from("promotions")
+      .insert(record);
+
+    error =
+      result.error;
+
+  }
+
+
+  if(error){
+
+    showStatus(
+      "Error: " +
+      error.message,
+      true
+    );
+
+  }else{
+
+    showStatus(
+      editingId
+      ? "✓ Promotion updated"
+      : "✓ Promotion added"
+    );
+
+    resetForm();
+
+    loadPromotions();
+
+  }
+
+
+  button.disabled = false;
+
+}
+
+
+/* EDIT */
+
+async function editPromotion(id){
+
+  const {
+    data,
+    error
+  } =
+    await client
+    .from("promotions")
+    .select("*")
+    .eq("id",id)
+    .single();
+
+
+  if(error){
+
+    showStatus(
+      error.message,
+      true
+    );
+
+    return;
+  }
+
+
+  editingId =
+    id;
+
+
+  document
+  .getElementById("image_url")
+  .value =
+    data.image_url || "";
+
+
+  document
+  .getElementById("title")
+  .value =
+    data.title || "";
+
+
+  document
+  .getElementById("description")
+  .value =
+    data.description || "";
+
+
+  document
+  .getElementById("button_text")
+  .value =
+    data.button_text || "";
+
+
+  document
+  .getElementById("button_url")
+  .value =
+    data.button_url || "";
+
+
+  document
+  .getElementById("display_order")
+  .value =
+    data.display_order ?? 0;
+
+
+  document
+  .getElementById("enabled")
+  .checked =
+    data.enabled !== false;
+
+
+  document
+  .getElementById("formTitle")
+  .textContent =
+    "Edit Promotion";
+
+
+  document
+  .getElementById("saveBtn")
+  .textContent =
+    "Update Promotion";
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* ENABLE / DISABLE */
+
+async function togglePromotion(
+  id,
+  current
+){
+
+  const {
+    error
+  } =
+    await client
+    .from("promotions")
+    .update({
+      enabled:!current,
+      updated_at:
+        new Date().toISOString()
+    })
+    .eq("id",id);
+
+
+  if(error){
+
+    showStatus(
+      error.message,
+      true
+    );
+
+    return;
+  }
+
+
+  loadPromotions();
+
+}
+
+
+/* DELETE */
+
+async function deletePromotion(id){
+
+  if(!confirm(
+    "Delete this promotion?"
+  )){
+    return;
+  }
+
+
+  const {
+    error
+  } =
+    await client
+    .from("promotions")
+    .delete()
+    .eq("id",id);
+
+
+  if(error){
+
+    showStatus(
+      error.message,
+      true
+    );
+
+    return;
+  }
+
+
+  showStatus(
+    "✓ Promotion deleted"
+  );
+
+
+  loadPromotions();
+
+}
+
+
+/* RESET */
+
+function resetForm(){
+
+  editingId = null;
+
+
+  document
+  .getElementById("image_url")
+  .value = "";
+
+
+  document
+  .getElementById("title")
+  .value = "";
+
+
+  document
+  .getElementById("description")
+  .value = "";
+
+
+  document
+  .getElementById("button_text")
+  .value = "";
+
+
+  document
+  .getElementById("button_url")
+  .value = "";
+
+
+  document
+  .getElementById("display_order")
+  .value = "0";
+
+
+  document
+  .getElementById("enabled")
+  .checked = true;
+
+
+  document
+  .getElementById("formTitle")
+  .textContent =
+    "Add Promotion";
+
+
+  document
+  .getElementById("saveBtn")
+  .textContent =
+    "Add Promotion";
+
+}
+
+
+/* STATUS */
+
+function showStatus(
+  message,
+  isError=false
+){
+
+  const status =
+    document
+    .getElementById("status");
+
+
+  status.textContent =
+    message;
+
+
+  status.style.color =
+    isError
+    ? "#ff7070"
+    : "#9cffb0";
+
+}
+
+
+/* SAFE HTML */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

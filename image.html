@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Manager</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#070707;
+  color:#fff;
+  min-height:100vh;
+  padding:16px;
+}
+
+.container{
+  max-width:850px;
+  margin:auto;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  gap:10px;
+}
+
+.header h1{
+  font-size:23px;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  padding:10px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:18px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+label{
+  display:block;
+  color:#aaa;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+select,
+input[type="file"]{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  font-size:14px;
+}
+
+input[type="file"]{
+  padding:11px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:15px;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#000;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.55;
+}
+
+.status{
+  text-align:center;
+  min-height:20px;
+  margin-top:13px;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.preview{
+  width:100%;
+  max-height:300px;
+  object-fit:contain;
+  border-radius:15px;
+  margin-top:15px;
+  display:none;
+  background:#000;
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.info{
+  color:#999;
+  font-size:12px;
+  line-height:1.6;
+  margin-top:12px;
+}
+
+@media(max-width:600px){
+  body{
+    padding:12px;
+  }
+
+  .header h1{
+    font-size:20px;
+  }
+
+  .card{
+    padding:16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+
+    <h1>Image Manager</h1>
+
+    <a href="dashboard.html" class="back">
+      ← Dashboard
+    </a>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="title">
+      Upload Image
+    </div>
+
+
+    <label>
+      Image Type
+    </label>
+
+    <select id="imageType">
+
+      <option value="profile">
+        Profile Image
+      </option>
+
+      <option value="promotion">
+        Promotion Image
+      </option>
+
+    </select>
+
+
+    <div style="margin-top:15px">
+
+      <label>
+        Choose Image
+      </label>
+
+      <input
+        id="imageFile"
+        type="file"
+        accept="image/*"
+      >
+
+    </div>
+
+
+    <img
+      id="preview"
+      class="preview"
+      alt="Preview"
+    >
+
+
+    <button id="uploadBtn">
+      Upload Image
+    </button>
+
+
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+
+    <div class="info">
+      Supported: JPG, JPEG, PNG, WEBP<br>
+      Recommended maximum size: 5 MB
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="title">
+      How it works
+    </div>
+
+    <div class="info">
+
+      1. Select Profile or Promotion.<br>
+      2. Choose your image.<br>
+      3. Press Upload Image.<br>
+      4. The image will be uploaded to Supabase Storage.<br>
+      5. A public image URL will be generated.<br>
+      6. You can use that URL in Profile/Promotion Manager.
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://grrpgehtndpgzepnqbwf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_tBa4h588PaqBxuuiHzF0cw_4bmrZST4";
+
+const BUCKET =
+"portfolio-images";
+
+let client = null;
+
+
+/* LOAD SUPABASE */
+
+const supabaseScript =
+document.createElement("script");
+
+supabaseScript.src =
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+supabaseScript.onload = async function(){
+
+  client =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+  await checkLogin();
+
+};
+
+document.head.appendChild(
+  supabaseScript
+);
+
+
+/* LOGIN CHECK */
+
+async function checkLogin(){
+
+  const {
+    data
+  } =
+    await client.auth.getSession();
+
+
+  if(!data.session){
+
+    location.href =
+      "index.html";
+
+    return;
+
+  }
+
+}
+
+
+/* IMAGE PREVIEW */
+
+document
+.getElementById("imageFile")
+.addEventListener(
+  "change",
+  function(){
+
+    const file =
+      this.files[0];
+
+    const preview =
+      document.getElementById(
+        "preview"
+      );
+
+
+    if(!file){
+
+      preview.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    if(file.size > 5 * 1024 * 1024){
+
+      showStatus(
+        "Image must be smaller than 5 MB.",
+        true
+      );
+
+      this.value = "";
+
+      preview.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function(e){
+
+        preview.src =
+          e.target.result;
+
+        preview.style.display =
+          "block";
+
+      };
+
+
+    reader.readAsDataURL(file);
+
+  }
+);
+
+
+/* UPLOAD */
+
+document
+.getElementById("uploadBtn")
+.addEventListener(
+  "click",
+  uploadImage
+);
+
+
+async function uploadImage(){
+
+  const fileInput =
+    document.getElementById(
+      "imageFile"
+    );
+
+  const type =
+    document.getElementById(
+      "imageType"
+    ).value;
+
+
+  const file =
+    fileInput.files[0];
+
+
+  if(!file){
+
+    showStatus(
+      "Please choose an image first.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  if(file.size > 5 * 1024 * 1024){
+
+    showStatus(
+      "Image must be smaller than 5 MB.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+
+  if(
+    !allowedTypes.includes(
+      file.type
+    )
+  ){
+
+    showStatus(
+      "Only JPG, PNG or WEBP images are allowed.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "uploadBtn"
+    );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Uploading...";
+
+
+  const extension =
+    file.name
+      .split(".")
+      .pop()
+      .toLowerCase();
+
+
+  const randomName =
+    Date.now() +
+    "_" +
+    Math.random()
+      .toString(36)
+      .substring(2,8) +
+    "." +
+    extension;
+
+
+  const folder =
+    type === "profile"
+    ? "profiles"
+    : "promotions";
+
+
+  const filePath =
+    folder +
+    "/" +
+    randomName;
+
+
+  const {
+    error
+  } =
+    await client
+    .storage
+    .from(BUCKET)
+    .upload(
+      filePath,
+      file,
+      {
+        cacheControl:"3600",
+        upsert:false
+      }
+    );
+
+
+  if(error){
+
+    showStatus(
+      "Upload failed: " +
+      error.message,
+      true
+    );
+
+    button.disabled = false;
+
+    button.textContent =
+      "Upload Image";
+
+    return;
+
+  }
+
+
+  const {
+    data
+  } =
+    client
+    .storage
+    .from(BUCKET)
+    .getPublicUrl(
+      filePath
+    );
+
+
+  const publicUrl =
+    data.publicUrl;
+
+
+  showStatus(
+    "✓ Upload successful!<br><br>" +
+    "Image URL:<br>" +
+    publicUrl
+  );
+
+
+  button.disabled = false;
+
+  button.textContent =
+    "Upload Image";
+
+
+  fileInput.value = "";
+
+}
+
+
+/* STATUS */
+
+function showStatus(
+  message,
+  isError=false
+){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  status.innerHTML =
+    message;
+
+
+  status.style.color =
+    isError
+    ? "#ff7070"
+    : "#9cffb0";
+
+}
+
+</script>
+
+</body>
+</html>

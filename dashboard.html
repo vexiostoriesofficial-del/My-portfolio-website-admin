@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta name="theme-color" content="#050505">
+
+<title>Admin Dashboard</title>
+
+
+<style>
+
+/* RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* BODY */
+
+body {
+
+    min-height: 100vh;
+
+    padding: 18px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(255,255,255,.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(255,255,255,.07),
+            transparent 35%
+        ),
+        #050505;
+}
+
+
+/* CONTAINER */
+
+.container {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: auto;
+}
+
+
+/* GLASS */
+
+.glass {
+
+    background:
+        rgba(255,255,255,.065);
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45),
+        inset 0 1px 0
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+}
+
+
+/* HEADER */
+
+.header {
+
+    padding: 24px;
+
+    margin-bottom: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.label {
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    color:
+        rgba(255,255,255,.45);
+
+    margin-bottom: 8px;
+}
+
+
+h1 {
+
+    font-size: 30px;
+
+    margin-bottom: 6px;
+}
+
+
+.email {
+
+    color:
+        rgba(255,255,255,.45);
+
+    font-size: 13px;
+}
+
+
+/* LOGOUT */
+
+.logout {
+
+    padding:
+        11px 17px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    background:
+        rgba(255,255,255,.07);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+
+/* WELCOME */
+
+.welcome {
+
+    padding: 25px;
+
+    margin-bottom: 18px;
+}
+
+
+.welcome h2 {
+
+    font-size: 21px;
+
+    margin-bottom: 9px;
+}
+
+
+.welcome p {
+
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* GRID */
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+
+/* CARD */
+
+.card {
+
+    position: relative;
+
+    min-height: 155px;
+
+    padding: 24px;
+
+    border-radius: 22px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: white;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 18px 50px
+        rgba(0,0,0,.35);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    transition: .25s ease;
+}
+
+
+.card:hover {
+
+    transform:
+        translateY(-5px);
+
+    background:
+        rgba(255,255,255,.10);
+}
+
+
+.icon {
+
+    width: 50px;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    font-size: 22px;
+
+    margin-bottom: 17px;
+}
+
+
+.card h3 {
+
+    font-size: 17px;
+
+    margin-bottom: 7px;
+}
+
+
+.card p {
+
+    color:
+        rgba(255,255,255,.48);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    padding-right: 10px;
+}
+
+
+.arrow {
+
+    position: absolute;
+
+    right: 20px;
+
+    bottom: 18px;
+
+    color:
+        rgba(255,255,255,.5);
+
+    font-size: 19px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 14px;
+    }
+
+    .header {
+        align-items: flex-start;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .header {
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .logout {
+
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header glass">
+
+        <div>
+
+            <div class="label">
+                ADMIN PANEL
+            </div>
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <div
+                id="email"
+                class="email"
+            >
+                Checking login...
+            </div>
+
+        </div>
+
+
+        <button
+            id="logout"
+            class="logout"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome glass">
+
+        <div class="label">
+            PORTFOLIO CONTROL
+        </div>
+
+        <h2>
+            Welcome 👋
+        </h2>
+
+        <p>
+            এখান থেকে তোমার Portfolio-এর
+            Profile, Social Media এবং
+            Promotion manage করতে পারবে।
+        </p>
+
+    </div>
+
+
+    <!-- MANAGEMENT -->
+
+    <div class="grid">
+
+
+        <!-- PROFILE -->
+
+        <button
+            class="card"
+            onclick="openPage('profile.html')"
+        >
+
+            <div class="icon">
+                👤
+            </div>
+
+            <h3>
+                Profile
+            </h3>
+
+            <p>
+                Name, title, about,
+                location, skills,
+                experience & education
+            </p>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </button>
+
+
+        <!-- SOCIAL -->
+
+        <button
+            class="card"
+            onclick="openPage('social.html')"
+        >
+
+            <div class="icon">
+                🔗
+            </div>
+
+            <h3>
+                Social Media
+            </h3>
+
+            <p>
+                Add, edit and manage
+                your social media links.
+            </p>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </button>
+
+
+        <!-- PROMOTION -->
+
+        <button
+            class="card"
+            onclick="openPage('promotion.html')"
+        >
+
+            <div class="icon">
+                📢
+            </div>
+
+            <h3>
+                Promotion
+            </h3>
+
+            <p>
+                Manage promotion title,
+                image, description and button.
+            </p>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </button>
+
+
+        <!-- IMAGES -->
+
+        <button
+            class="card"
+            onclick="openPage('promotion.html')"
+        >
+
+            <div class="icon">
+                🖼️
+            </div>
+
+            <h3>
+                Images
+            </h3>
+
+            <p>
+                Profile and promotion
+                images will be managed here.
+            </p>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* ==============================
+   SUPABASE
+============================== */
+
+const SUPABASE_URL =
+"https://grrpgehtndpgzepnqbwf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_tBa4h588PaqBxuuiHzF0cw_4bmrZST4";
+
+
+/* ==============================
+   LOAD SUPABASE
+============================== */
+
+function loadSupabase() {
+
+    return new Promise((resolve, reject) => {
+
+        if (window.supabase) {
+
+            resolve();
+
+            return;
+        }
+
+
+        const script =
+        document.createElement("script");
+
+
+        script.src =
+        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+
+        script.onload = resolve;
+
+        script.onerror = reject;
+
+
+        document.head.appendChild(script);
+
+    });
+
+}
+
+
+/* ==============================
+   START
+============================== */
+
+async function start() {
+
+    try {
+
+        await loadSupabase();
+
+
+        const client =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+        const {
+            data,
+            error
+        } =
+        await client.auth.getSession();
+
+
+        if (error) {
+
+            throw error;
+        }
+
+
+        /* NOT LOGGED IN */
+
+        if (!data.session) {
+
+            window.location.href =
+                "index.html";
+
+            return;
+        }
+
+
+        /* SHOW EMAIL */
+
+        document.getElementById(
+            "email"
+        ).textContent =
+            data.session.user.email;
+
+
+        /* LOGOUT */
+
+        document.getElementById(
+            "logout"
+        ).onclick =
+        async function() {
+
+            await client.auth.signOut();
+
+            window.location.href =
+                "index.html";
+        };
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        window.location.href =
+            "index.html";
+    }
+
+}
+
+
+/* ==============================
+   OPEN PAGE
+============================== */
+
+function openPage(page) {
+
+    window.location.href = page;
+
+}
+
+
+start();
+
+</script>
+
+
+</body>
+
+</html>

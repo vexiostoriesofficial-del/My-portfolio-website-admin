@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Social Media Manager</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#070707;
+  color:#fff;
+  min-height:100vh;
+  padding:16px;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.header h1{
+  font-size:23px;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  padding:10px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:18px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  color:#aaa;
+  margin-bottom:7px;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  outline:none;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  font-size:14px;
+}
+
+input:focus{
+  border-color:rgba(255,255,255,.45);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:12px 0;
+}
+
+.check-row input{
+  width:18px;
+  height:18px;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.save{
+  width:100%;
+  padding:14px;
+  border-radius:13px;
+  background:#fff;
+  color:#000;
+  font-weight:bold;
+  font-size:15px;
+}
+
+.social-item{
+  border:1px solid rgba(255,255,255,.11);
+  background:rgba(0,0,0,.25);
+  border-radius:16px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.social-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+
+.social-name{
+  font-weight:bold;
+}
+
+.social-info{
+  color:#aaa;
+  font-size:13px;
+  margin-top:7px;
+  word-break:break-word;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.action-btn{
+  padding:9px 12px;
+  border-radius:10px;
+  color:#fff;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.delete{
+  background:rgba(255,70,70,.12);
+}
+
+.status{
+  text-align:center;
+  min-height:20px;
+  margin-top:12px;
+  font-size:14px;
+}
+
+.empty{
+  color:#999;
+  text-align:center;
+  padding:20px;
+}
+
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .header h1{
+    font-size:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>Social Media</h1>
+
+    <a href="dashboard.html" class="back">
+      ← Dashboard
+    </a>
+  </div>
+
+
+  <!-- ADD / EDIT -->
+
+  <div class="card">
+
+    <div class="title" id="formTitle">
+      Add Social Media
+    </div>
+
+    <div class="grid">
+
+      <div class="form-group">
+        <label>Platform</label>
+        <input id="platform" placeholder="TikTok">
+      </div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input id="username" placeholder="@username">
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <label>Profile URL</label>
+      <input id="url" type="url" placeholder="https://...">
+    </div>
+
+    <div class="form-group">
+      <label>Icon</label>
+      <input id="icon" placeholder="🎵">
+    </div>
+
+    <div class="grid">
+
+      <div class="form-group">
+        <label>Display Order</label>
+        <input id="display_order" type="number" value="1">
+      </div>
+
+    </div>
+
+    <div class="check-row">
+      <input id="enabled" type="checkbox" checked>
+      <label for="enabled" style="margin:0">
+        Enabled
+      </label>
+    </div>
+
+    <button class="save" id="saveBtn">
+      Add Social Media
+    </button>
+
+    <div class="status" id="status"></div>
+
+  </div>
+
+
+  <!-- LIST -->
+
+  <div class="card">
+
+    <div class="title">
+      Your Social Media
+    </div>
+
+    <div id="socialList">
+      Loading...
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://grrpgehtndpgzepnqbwf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_tBa4h588PaqBxuuiHzF0cw_4bmrZST4";
+
+let client = null;
+let editingId = null;
+
+
+/* LOAD SUPABASE */
+
+const supabaseScript =
+document.createElement("script");
+
+supabaseScript.src =
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+supabaseScript.onload = async () => {
+
+  client =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+  await checkLogin();
+
+};
+
+document.head.appendChild(supabaseScript);
+
+
+/* LOGIN CHECK */
+
+async function checkLogin(){
+
+  const {
+    data
+  } = await client.auth.getSession();
+
+  if(!data.session){
+
+    location.href =
+      "index.html";
+
+    return;
+  }
+
+  loadSocials();
+}
+
+
+/* LOAD SOCIALS */
+
+async function loadSocials(){
+
+  const list =
+    document.getElementById("socialList");
+
+  list.innerHTML =
+    "Loading...";
+
+
+  const {
+    data,
+    error
+  } = await client
+    .from("social_links")
+    .select("*")
+    .order("display_order", {
+      ascending:true
+    });
+
+
+  if(error){
+
+    list.innerHTML =
+      `<div class="empty">
+        ${error.message}
+      </div>`;
+
+    return;
+  }
+
+
+  if(!data || data.length === 0){
+
+    list.innerHTML =
+      `<div class="empty">
+        No social media added yet.
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  data.forEach(item => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "social-item";
+
+
+    div.innerHTML = `
+
+      <div class="social-top">
+
+        <div class="social-name">
+          ${escapeHTML(item.icon || "🔗")}
+          ${escapeHTML(item.platform || "Social")}
+        </div>
+
+        <div>
+          ${item.enabled ? "🟢 Enabled" : "⚪ Disabled"}
+        </div>
+
+      </div>
+
+      <div class="social-info">
+        ${escapeHTML(item.username || "")}
+      </div>
+
+      <div class="social-info">
+        ${escapeHTML(item.url || "")}
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="action-btn"
+          onclick="editSocial(${item.id})">
+          Edit
+        </button>
+
+        <button
+          class="action-btn"
+          onclick="toggleSocial(${item.id}, ${item.enabled})">
+          ${item.enabled ? "Disable" : "Enable"}
+        </button>
+
+        <button
+          class="action-btn delete"
+          onclick="deleteSocial(${item.id})">
+          Delete
+        </button>
+
+      </div>
+    `;
+
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+/* ADD / UPDATE */
+
+document
+.getElementById("saveBtn")
+.addEventListener("click", saveSocial);
+
+
+async function saveSocial(){
+
+  const platform =
+    document.getElementById("platform")
+    .value.trim();
+
+  const username =
+    document.getElementById("username")
+    .value.trim();
+
+  const url =
+    document.getElementById("url")
+    .value.trim();
+
+  const icon =
+    document.getElementById("icon")
+    .value.trim();
+
+  const display_order =
+    Number(
+      document.getElementById("display_order")
+      .value
+    ) || 1;
+
+  const enabled =
+    document.getElementById("enabled")
+    .checked;
+
+
+  if(!platform || !url){
+
+    showStatus(
+      "Platform and URL are required.",
+      true
+    );
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById("saveBtn");
+
+  button.disabled = true;
+
+  button.textContent =
+    "Saving...";
+
+
+  const record = {
+
+    platform,
+    username,
+    url,
+    icon,
+    enabled,
+    display_order
+
+  };
+
+
+  let error;
+
+
+  if(editingId){
+
+    const result =
+      await client
+      .from("social_links")
+      .update(record)
+      .eq("id", editingId);
+
+    error =
+      result.error;
+
+  }else{
+
+    const result =
+      await client
+      .from("social_links")
+      .insert(record);
+
+    error =
+      result.error;
+
+  }
+
+
+  if(error){
+
+    showStatus(
+      "Error: " + error.message,
+      true
+    );
+
+  }else{
+
+    showStatus(
+      editingId
+      ? "✓ Social media updated"
+      : "✓ Social media added"
+    );
+
+    resetForm();
+
+    loadSocials();
+
+  }
+
+
+  button.disabled = false;
+
+}
+
+
+/* EDIT */
+
+async function editSocial(id){
+
+  const {
+    data,
+    error
+  } = await client
+    .from("social_links")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+
+  if(error){
+
+    showStatus(
+      error.message,
+      true
+    );
+
+    return;
+  }
+
+
+  editingId =
+    id;
+
+
+  document.getElementById("platform").value =
+    data.platform || "";
+
+  document.getElementById("username").value =
+    data.username || "";
+
+  document.getElementById("url").value =
+    data.url || "";
+
+  document.getElementById("icon").value =
+    data.icon || "";
+
+  document.getElementById("display_order").value =
+    data.display_order || 1;
+
+  document.getElementById("enabled").checked =
+    data.enabled !== false;
+
+
+  document.getElementById("formTitle")
+    .textContent =
+    "Edit Social Media";
+
+  document.getElementById("saveBtn")
+    .textContent =
+    "Update Social Media";
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* TOGGLE */
+
+async function toggleSocial(id, current){
+
+  const {
+    error
+  } = await client
+    .from("social_links")
+    .update({
+      enabled:!current
+    })
+    .eq("id",id);
+
+
+  if(error){
+
+    showStatus(
+      error.message,
+      true
+    );
+
+    return;
+  }
+
+
+  loadSocials();
+
+}
+
+
+/* DELETE */
+
+async function deleteSocial(id){
+
+  const confirmDelete =
+    confirm(
+      "Delete this social media?"
+    );
+
+  if(!confirmDelete)
+    return;
+
+
+  const {
+    error
+  } = await client
+    .from("social_links")
+    .delete()
+    .eq("id",id);
+
+
+  if(error){
+
+    showStatus(
+      error.message,
+      true
+    );
+
+    return;
+  }
+
+
+  showStatus(
+    "✓ Social media deleted"
+  );
+
+  loadSocials();
+
+}
+
+
+/* RESET */
+
+function resetForm(){
+
+  editingId = null;
+
+  document.getElementById("platform").value="";
+  document.getElementById("username").value="";
+  document.getElementById("url").value="";
+  document.getElementById("icon").value="";
+  document.getElementById("display_order").value="1";
+  document.getElementById("enabled").checked=true;
+
+  document.getElementById("formTitle")
+    .textContent =
+    "Add Social Media";
+
+  document.getElementById("saveBtn")
+    .textContent =
+    "Add Social Media";
+
+}
+
+
+/* STATUS */
+
+function showStatus(message,error=false){
+
+  const status =
+    document.getElementById("status");
+
+  status.textContent =
+    message;
+
+  status.style.color =
+    error
+    ? "#ff7070"
+    : "#9cffb0";
+
+}
+
+
+/* SECURITY */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
